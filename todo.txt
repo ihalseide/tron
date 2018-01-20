@@ -1,0 +1,6 @@
+1. add main title
+2. sounds
+3. restart message
+4. background grid
+5. bike texturing
+6. make trails into lines

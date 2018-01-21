@@ -1,16 +1,14 @@
 #!python3
+# bikes.py
 
+#external
 import pygame
 import math
 import random
 import xmath
 
-
-
-UP = 1
-DOWN = -1
-RIGHT = 2
-LEFT = -2
+# internal
+import constants
 
 
 
@@ -20,6 +18,7 @@ def darken(color_tuple, amount=25):
     b = xmath.constrain(color_tuple[2] - amount, 0, 255)
     #print(r, g, b)
     return r, g, b
+
 
 
 class Trail(pygame.sprite.Sprite):

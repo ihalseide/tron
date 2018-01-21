@@ -1,2 +1,3 @@
-# tron
-A python tron game clone using pygame
+# Tron (Clone)
+A Python Tron game clone using Pygame.
+(blah test)

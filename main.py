@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
-
-
+# outside libraries
 import pygame
+import logging
 
+# native code
 import scenes
+from constants import *
 
 
 
-def run_game(title, width, height, fps, start_scene):
+def main(title, width, height, fps, start_scene):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption(title)
@@ -34,6 +36,7 @@ def run_game(title, width, height, fps, start_scene):
                     quit_attempt = True
 
             if quit_attempt:
+                logging.info("Quit attempt made")
                 active_scene.terminate()
             else:
                 filtered_events.append(event)
@@ -50,4 +53,4 @@ def run_game(title, width, height, fps, start_scene):
 
 
 if __name__ == "__main__":
-    run_game("Tron Bikes", 500, 500, 30, scenes.GameScene(2))
+    main("Tron Bikes", 500, 500, 30, scenes.TitleScene())

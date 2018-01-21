@@ -1,8 +1,14 @@
+#!python3
+
+# external libs
 import pygame
+import logging
 import random
 
+# internal libs.
 import bikes
 from keys_setup import KeysSetup
+from constants import *
 
 
 
@@ -13,15 +19,15 @@ class SceneBase:
 
 
     def process_inputs(self, events, pressed_keys):
-        raise NotImplemented
+        pass
 
 
     def update(self):
-        raise NotImplemented
+        pass
 
 
     def render(self, screen):
-        raise NotImplemented
+        pass
 
 
     def switch_to_scene(self, next_scene):
@@ -34,15 +40,65 @@ class SceneBase:
 
 
 
-class TitleScene(SceneBase):
+class AboutScene(SceneBase):
 
     def __init__(self):
         super().__init__()
 
+        pygame.font.init()
+
+        self.font = pygame.font.SysFont("Courier New", 20)
+        self.label = self.font.render("Hi", 1, (0, 255, 0))
+
+
+    def display(self, screen):
+        screen.fill((0, 0, 0))
+        screen.blit(self.label, (20, 20))
+
+
+    def update(self):
+        pass
+
+
+class TitleScene(SceneBase):
+
+    def __init__(self):
+        super().__init__()
+        
+        pygame.font.init()
+
+        # design
+        self.spacing = 40
+        self.font = pygame.font.SysFont("Courier New", 40)
+        self.selected_color = pygame.color.THECOLORS['white']
+        self.unselected_color = pygame.color.THECOLORS['blue']
+        
+        self.options = ["Play Normal", "Play Modified", "About", "Quit"]
+        self.needs_update = True
+        self.index = 0
+
 
     def process_inputs(self, events, keys):
-        if pygame.K_ESCAPE in keys:
-            self.terminate
+        
+        if keys[pygame.K_DOWN]:
+            if self.index < len(self.options) - 1:
+                self.index += 1
+                self.needs_update = True
+        elif keys[pygame.K_UP]:
+            if self.index > 0:
+                self.index -= 1
+                self.needs_update = True
+        elif keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
+            selected = self.options[self.index]
+            if selected == "Play Normal":
+                self.switch_to_scene(GameScene(2))
+            elif selected == "About":
+                self.switch_to_scene(AboutScene())
+            elif selected == "Play Modified":
+                logging.warn('"Play Modified" was selected, \
+                             but it doesn\'t exist yet')
+            elif selected == "Quit":
+                self.terminate()
 
 
     def update(self):
@@ -50,20 +106,25 @@ class TitleScene(SceneBase):
 
 
     def display(self, screen):
-        #pygame.draw.rect(screen, (255, 255, 255), (0, 0, 20, 20))
-        pass
+        if self.needs_update:
+            self.needs_update = False
 
+            screen.fill((0, 0, 0))
+
+            for i, opt in enumerate(self.options):
+                y = i * self.spacing
+                if i == self.index:
+                    c = self.selected_color
+                else:
+                    c = self.unselected_color
+                label = self.font.render(opt, 1, c)
+                screen.blit(label, (0, y))
+
+        else:
+            pass
 
 
 class GameScene(SceneBase):
-
-    # this class also acts as the game board
-    # constants
-    UP = 1
-    DOWN = -1
-    RIGHT = 2
-    LEFT = -2
-
 
     @staticmethod
     def fill_board(dimensions, value=None):
@@ -106,28 +167,28 @@ class GameScene(SceneBase):
             b = bikes.Bike(self, "P1",
                            self.board_size[0] // 4 * self.tile_size,
                            self.board_size[1] // 2 * self.tile_size,
-                           self.RIGHT, (255, 0, 0), KeysSetup.wasd)
+                           RIGHT, (255, 0, 0), KeysSetup.wasd)
             spawns.append(b)
         
         if self.num_of_players >= 2:
             b = bikes.Bike(self, "P2",
                            self.board_size[0] // 4 * 3 * self.tile_size,
                            self.board_size[1] // 2 * self.tile_size,
-                           self.LEFT, (0, 0, 255), KeysSetup.ijkl)
+                           LEFT, (0, 0, 255), KeysSetup.ijkl)
             spawns.append(b)
 
         if self.num_of_players >= 3:
             b = bikes.Bike(self, "P3",
                            self.board_size[0] // 2 * self.tile_size,
                            self.board_size[1] // 4 * 3 * self.tile_size,
-                           self.UP, (255, 255, 0), KeysSetup.arrows)
+                           UP, (255, 255, 0), KeysSetup.arrows)
             spawns.append(b)
 
         if self.num_of_players == 4:
             b = bikes.Bike(self, "P4",
                            self.board_size[0] // 2 * self.tile_size,
                            self.board_size[1] // 4 * self.tile_size,
-                           self.DOWN, (0, 255, 255), KeysSetup.arrows)
+                           DOWN, (0, 255, 255), KeysSetup.arrows)
             spawns.append(b)
 
         self.bikes.add(spawns)

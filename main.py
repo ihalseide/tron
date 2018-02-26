@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
-# outside libraries
 import pygame
 import logging
 
-# native code
 import scenes
 from constants import *
-
 
 
 def main(title, width, height, fps, start_scene):

@@ -8,7 +8,7 @@ import random
 import xmath
 
 # internal
-import constants
+from constants import *
 
 
 
@@ -30,9 +30,9 @@ class Trail(pygame.sprite.Sprite):
         self.color = color
 
         self.image = pygame.Surface((self.game.tile_size, self.game.tile_size))
-        
+
         self.rect =self.image.get_rect()
-        
+
         self.image.fill(darken(self.color, 50))
         pygame.draw.rect(self.image, self.color, self.rect, 1)
 
@@ -74,7 +74,7 @@ class Bike(pygame.sprite.Sprite):
 
 
     def process_inputs(self, events, keys):
-        
+
         if keys[self.key_setup.up] and not self.direction == DOWN:
             self.direction = UP
         elif keys[self.key_setup.down] and not self.direction == UP:
@@ -99,7 +99,7 @@ class Bike(pygame.sprite.Sprite):
             self.rect.x -= self.game.tile_size
 
 
-    def make_trail(self): 
+    def make_trail(self):
         new_trail = Trail(self.game, self.rect.x, self.rect.y, self.color)
         self.game.trails.add(new_trail)
 
@@ -117,8 +117,8 @@ class Bike(pygame.sprite.Sprite):
             self.kill()
 
         self.ticks += 1
-        
-        
+
+
     def is_in_bounds(self):
         return self.game.is_in_bounds(self.rect)
 
@@ -133,4 +133,3 @@ class Bike(pygame.sprite.Sprite):
 
     def __repr__(self):
         return str(self)
-            

@@ -1,5 +1,4 @@
-#! python3
-# constants.py
+#!/usr/bin/env python3
 
 UP    = NORTH = +1
 DOWN  = SOUTH = -1

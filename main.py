@@ -3,7 +3,8 @@
 import pygame
 import logging
 
-import scenes
+from title_scene import TitleScene
+from game_scene import GameScene
 from constants import *
 
 
@@ -50,4 +51,4 @@ def main(title, width, height, fps, start_scene):
 
 
 if __name__ == "__main__":
-    main("Tron Bikes", 500, 500, 30, scenes.TitleScene())
+    main("Tron Clone", 500, 500, 30, TitleScene())
